@@ -18,39 +18,22 @@
 
 namespace ZfrOAuth2ModuleTest\Server\Factory;
 
-use Zend\ServiceManager\ServiceManager;
-use ZfrOAuth2Module\Server\Factory\ClientServiceFactory;
+use Zend\ServiceManager\FactoryInterface;
 use ZfrOAuth2Module\Server\Factory\ScopeServiceFactory;
-use ZfrOAuth2Module\Server\Options\ModuleOptions;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  *
- * @covers ZfrOAuth2Module\Server\Factory\ScopeServiceFactory
+ * @covers  ZfrOAuth2Module\Server\Factory\ScopeServiceFactory
  */
 class ScopeServiceFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCanCreateFromFactory()
+    public function testInteropCompatible()
     {
-        $serviceManager = new ServiceManager();
-
-        $serviceManager->setService(
-            'ZfrOAuth2Module\Server\Options\ModuleOptions',
-            new ModuleOptions(['object_manager' => 'my_object_manager'])
-        );
-
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $serviceManager->setService('my_object_manager', $objectManager);
-
-        $objectManager->expects($this->once())
-                      ->method('getRepository')
-                      ->with('ZfrOAuth2\Server\Entity\Scope')
-                      ->will($this->returnValue($this->getMock('Doctrine\Common\Persistence\ObjectRepository')));
-
         $factory = new ScopeServiceFactory();
-        $service = $factory->createService($serviceManager);
 
-        $this->assertInstanceOf('ZfrOAuth2\Server\Service\ScopeService', $service);
+        $this->assertInstanceOf(FactoryInterface::class, $factory);
+        $this->assertTrue(is_callable($factory));
     }
 }

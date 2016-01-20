@@ -18,26 +18,24 @@
 
 namespace ZfrOAuth2ModuleTest\Server\Factory;
 
-use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\FactoryInterface;
+use ZfrOAuth2\Server\Container\ServerOptionsFactory;
 use ZfrOAuth2Module\Server\Factory\ModuleOptionsFactory;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  *
- * @covers ZfrOAuth2Module\Server\Factory\ModuleOptionsFactory
+ * @covers  ZfrOAuth2Module\Server\Factory\ModuleOptionsFactory
  */
 class ModuleOptionsFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCanCreateFromFactory()
+    public function testInteropCompatible()
     {
-        $serviceManager = new ServiceManager();
-
-        $serviceManager->setService('Config', ['zfr_oauth2_server' => []]);
-
         $factory = new ModuleOptionsFactory();
-        $service = $factory->createService($serviceManager);
 
-        $this->assertInstanceOf('ZfrOAuth2Module\Server\Options\ModuleOptions', $service);
+        $this->assertInstanceOf(ServerOptionsFactory::class, $factory);
+        $this->assertInstanceOf(FactoryInterface::class, $factory);
+        $this->assertTrue(is_callable($factory));
     }
 }

@@ -20,32 +20,19 @@ namespace ZfrOAuth2Module\Server\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZfrOAuth2\Server\Service\TokenService;
+use ZfrOAuth2\Server\Container\AccessTokenServiceFactory as BaseAccessTokenServiceFactory;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  */
-class AccessTokenServiceFactory implements FactoryInterface
+class AccessTokenServiceFactory extends BaseAccessTokenServiceFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /* @var \ZfrOAuth2Module\Server\Options\ModuleOptions $options */
-        $options = $serviceLocator->get('ZfrOAuth2Module\Server\Options\ModuleOptions');
-
-        /* @var \Doctrine\Common\Persistence\ObjectManager $objectManager */
-        $objectManager   = $serviceLocator->get($options->getObjectManager());
-        $tokenRepository = $objectManager->getRepository('ZfrOAuth2\Server\Entity\AccessToken');
-
-        /* @var \ZfrOAuth2\Server\Service\ScopeService $scopeService */
-        $scopeService = $serviceLocator->get('ZfrOAuth2\Server\Service\ScopeService');
-
-        $accessTokenService = new TokenService($objectManager, $tokenRepository, $scopeService);
-        $accessTokenService->setTokenTTL($options->getAccessTokenTtl());
-
-        return $accessTokenService;
+        return $this($serviceLocator);
     }
 }

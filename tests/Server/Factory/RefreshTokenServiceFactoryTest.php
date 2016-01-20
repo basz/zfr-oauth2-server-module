@@ -18,43 +18,22 @@
 
 namespace ZfrOAuth2ModuleTest\Server\Factory;
 
-use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\FactoryInterface;
 use ZfrOAuth2Module\Server\Factory\RefreshTokenServiceFactory;
-use ZfrOAuth2Module\Server\Options\ModuleOptions;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  *
- * @covers ZfrOAuth2Module\Server\Factory\RefreshTokenServiceFactory
+ * @covers  ZfrOAuth2Module\Server\Factory\RefreshTokenServiceFactory
  */
 class RefreshTokenServiceFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCanCreateFromFactory()
+    public function testInteropCompatible()
     {
-        $serviceManager = new ServiceManager();
-
-        $serviceManager->setService(
-            'ZfrOAuth2Module\Server\Options\ModuleOptions',
-            new ModuleOptions(['object_manager' => 'my_object_manager'])
-        );
-
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $serviceManager->setService('my_object_manager', $objectManager);
-
-        $objectManager->expects($this->at(0))
-                      ->method('getRepository')
-                      ->with('ZfrOAuth2\Server\Entity\RefreshToken')
-                      ->will($this->returnValue($this->getMock('Doctrine\Common\Persistence\ObjectRepository')));
-
-        $serviceManager->setService(
-            'ZfrOAuth2\Server\Service\ScopeService',
-            $this->getMock('ZfrOAuth2\Server\Service\ScopeService', [], [], '', false)
-        );
-
         $factory = new RefreshTokenServiceFactory();
-        $service = $factory->createService($serviceManager);
 
-        $this->assertInstanceOf('ZfrOAuth2\Server\Service\TokenService', $service);
+        $this->assertInstanceOf(FactoryInterface::class, $factory);
+        $this->assertTrue(is_callable($factory));
     }
 }

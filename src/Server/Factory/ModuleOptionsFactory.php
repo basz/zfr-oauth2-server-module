@@ -20,19 +20,19 @@ namespace ZfrOAuth2Module\Server\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZfrOAuth2Module\Server\Options\ModuleOptions;
+use ZfrOAuth2\Server\Container\ServerOptionsFactory;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  */
-class ModuleOptionsFactory implements FactoryInterface
+class ModuleOptionsFactory extends ServerOptionsFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new ModuleOptions($serviceLocator->get('Config')['zfr_oauth2_server']);
+        return $this($serviceLocator);
     }
 }

@@ -20,7 +20,7 @@ namespace ZfrOAuth2ModuleTest\Server\Factory;
 
 use Zend\ServiceManager\ServiceManager;
 use ZfrOAuth2Module\Server\Factory\ClientServiceFactory;
-use ZfrOAuth2Module\Server\Options\ModuleOptions;
+use ZfrOAuth2\Server\Options\ServerOptions as ModuleOptions;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>

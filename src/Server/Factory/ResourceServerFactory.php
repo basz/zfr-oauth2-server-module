@@ -20,22 +20,19 @@ namespace ZfrOAuth2Module\Server\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZfrOAuth2\Server\ResourceServer;
+use ZfrOAuth2\Server\Container\ResourceServerFactory as BaseResourceServerFactory;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  */
-class ResourceServerFactory implements FactoryInterface
+class ResourceServerFactory extends BaseResourceServerFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /* @var \ZfrOAuth2\Server\Service\TokenService $accessTokenService */
-        $accessTokenService = $serviceLocator->get('ZfrOAuth2\Server\Service\AccessTokenService');
-
-        return new ResourceServer($accessTokenService);
+        return $this($serviceLocator);
     }
 }

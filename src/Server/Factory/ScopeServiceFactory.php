@@ -20,26 +20,19 @@ namespace ZfrOAuth2Module\Server\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZfrOAuth2\Server\Service\ScopeService;
+use ZfrOAuth2\Server\Container\ScopeServiceFactory as BaseScopeServiceFactory;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  */
-class ScopeServiceFactory implements FactoryInterface
+class ScopeServiceFactory extends BaseScopeServiceFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /* @var \ZfrOAuth2Module\Server\Options\ModuleOptions $options */
-        $options = $serviceLocator->get('ZfrOAuth2Module\Server\Options\ModuleOptions');
-
-        /* @var \Doctrine\Common\Persistence\ObjectManager $objectManager */
-        $objectManager   = $serviceLocator->get($options->getObjectManager());
-        $scopeRepository = $objectManager->getRepository('ZfrOAuth2\Server\Entity\Scope');
-
-        return new ScopeService($objectManager, $scopeRepository);
+        return $this($serviceLocator);
     }
 }
