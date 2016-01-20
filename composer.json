@@ -16,6 +16,12 @@
       "homepage": "http://www.michaelgallego.fr"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/basz/zfr-oauth2-server"
+    }
+  ],
   "require": {
     "php": ">=5.5",
     "zendframework/zend-servicemanager": "~2.2",
@@ -24,13 +30,16 @@
     "zendframework/zend-http": "~2.2",
     "zendframework/zend-console": "~2.2",
     "zendframework/zend-stdlib": "~2.2",
-    "doctrine/doctrine-module": "~0.9",
-    "zfr/zfr-oauth2-server": "0.7.*"
+    "doctrine/doctrine-orm-module": "~0.9",
+    "zfr/zfr-oauth2-server": "dev-middleware-addendum"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.6",
     "squizlabs/php_codesniffer": "1.4.*",
     "zendframework/zend-view": "~2.2",
+    "zendframework/zend-log": "~2.2",
+    "zendframework/zend-i18n": "~2.2",
+    "zendframework/zend-serializer": "~2.2",
     "satooshi/php-coveralls": "~0.6"
   },
   "autoload": {
