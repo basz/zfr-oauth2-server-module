@@ -16,8 +16,10 @@
  * and is licensed under the MIT license.
  */
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use ZfrOAuth2\Server\AuthorizationServer;
+use ZfrOAuth2\Server\Options\ServerOptions;
 use ZfrOAuth2\Server\ResourceServer;
 use ZfrOAuth2\Server\Service\ClientService;
 use ZfrOAuth2\Server\Service\ScopeService;
@@ -31,27 +33,32 @@ use ZfrOAuth2Module\Server\Factory\AuthorizationControllerFactory;
 use ZfrOAuth2Module\Server\Factory\AuthorizationServerFactory;
 use ZfrOAuth2Module\Server\Factory\ClientServiceFactory;
 use ZfrOAuth2Module\Server\Factory\GrantPluginManagerFactory;
+use ZfrOAuth2Module\Server\Factory\ManagerRegistryFactory;
 use ZfrOAuth2Module\Server\Factory\ModuleOptionsFactory;
 use ZfrOAuth2Module\Server\Factory\RefreshTokenServiceFactory;
 use ZfrOAuth2Module\Server\Factory\ResourceServerFactory;
 use ZfrOAuth2Module\Server\Factory\ScopeServiceFactory;
 use ZfrOAuth2Module\Server\Factory\TokenControllerFactory;
 use ZfrOAuth2Module\Server\Grant\GrantPluginManager;
-use ZfrOAuth2Module\Server\Options\ModuleOptions;
+use ZfrOAuth2Module\Util\DoctrineRegistry;
 
 return [
     'service_manager' => [
+        'aliases'   => [
+            ManagerRegistry::class => DoctrineRegistry::class,
+        ],
         'factories' => [
             /**
              * Factories that map to a class
              */
-            AuthorizationServer::class  => AuthorizationServerFactory::class,
-            ResourceServer::class       => ResourceServerFactory::class,
-            ClientService::class        => ClientServiceFactory::class,
-            ScopeService::class         => ScopeServiceFactory::class,
-            AccessTokenStorage::class   => AccessTokenStorageFactory::class,
-            ModuleOptions::class        => ModuleOptionsFactory::class,
-            GrantPluginManager::class   => GrantPluginManagerFactory::class,
+            AuthorizationServer::class                          => AuthorizationServerFactory::class,
+            ResourceServer::class                               => ResourceServerFactory::class,
+            ClientService::class                                => ClientServiceFactory::class,
+            ScopeService::class                                 => ScopeServiceFactory::class,
+            AccessTokenStorage::class                           => AccessTokenStorageFactory::class,
+            GrantPluginManager::class                           => GrantPluginManagerFactory::class,
+            DoctrineRegistry::class                             => ManagerRegistryFactory::class,
+            ServerOptions::class                                => ModuleOptionsFactory::class,
 
             /**
              * Factories that do not map to a class
@@ -68,7 +75,7 @@ return [
                 'class' => XmlDriver::class,
                 'paths' => __DIR__ . '/../../zfr-oauth2-server/config/doctrine',
             ],
-            'orm_default' => [
+            'orm_default'       => [
                 'drivers' => [
                     'ZfrOAuth2\Server\Entity' => 'zfr_oauth2_driver',
                 ],
@@ -97,8 +104,8 @@ return [
     'router' => [
         'routes' => [
             'zfr-oauth2-server' => [
-                'type'    => 'Literal',
-                'options' => [
+                'type'          => 'Literal',
+                'options'       => [
                     'route' => '/oauth'
                 ],
                 'may_terminate' => false,
