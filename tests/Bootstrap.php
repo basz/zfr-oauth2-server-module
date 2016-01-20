@@ -1,46 +1,83 @@
 <?php
-/*
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * This software consists of voluntary contributions made by many individuals
- * and is licensed under the MIT license.
+namespace ZfrOAuth2ModuleTest;
+
+use RuntimeException;
+use Zend\Mvc\Service\ServiceManagerConfig;
+use Zend\ServiceManager\ServiceManager;
+
+/**
+ * Test bootstrap
  */
+class Bootstrap
+{
+    /**
+     * @var ServiceManager
+     */
+    protected static $serviceManager;
 
-ini_set('error_reporting', E_ALL);
+    public static function init()
+    {
+        error_reporting(E_ALL | E_STRICT);
+        chdir(__DIR__);
+        static::initAutoloader();
+        $serviceManager = new ServiceManager(new ServiceManagerConfig());
+        $serviceManager->setService('ApplicationConfig', self::getApplicationConfig());
+        $serviceManager->get('ModuleManager')->loadModules();
+        static::$serviceManager = $serviceManager;
+    }
 
-$files = [__DIR__ . '/../vendor/autoload.php', __DIR__ . '/../../../autoload.php'];
+    protected static function initAutoloader()
+    {
+        $vendorPath = static::findParentPath('vendor');
+        if (is_readable($vendorPath . '/autoload.php')) {
+            $loader = include $vendorPath . '/autoload.php';
 
-foreach ($files as $file) {
-    if (file_exists($file)) {
-        $loader = require $file;
+            return;
+        }
+        throw new RuntimeException(
+            'Unable to load ZF2. Run `php composer.phar install` or define a ZF2_PATH environment variable.'
+        );
+    }
 
-        break;
+    public static function getApplicationConfig()
+    {
+        $config = [];
+        if (!$config = @include __DIR__ . '/TestConfiguration.php') {
+            $config = require __DIR__ . '/TestConfiguration.php.dist';
+        }
+
+        return $config;
+    }
+
+    public static function chroot()
+    {
+        $rootPath = dirname(static::findParentPath('vendor'));
+        chdir($rootPath);
+    }
+
+    /**
+     * @return ServiceManager
+     */
+    public static function getServiceManager()
+    {
+        return static::$serviceManager;
+    }
+
+    protected static function findParentPath($path)
+    {
+        $dir         = __DIR__;
+        $previousDir = '.';
+        while (!is_dir($dir . '/' . $path)) {
+            $dir = dirname($dir);
+            if ($previousDir === $dir) {
+                return false;
+            }
+            $previousDir = $dir;
+        }
+
+        return $dir . '/' . $path;
     }
 }
 
-if (! isset($loader)) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Did you install via composer?');
-}
-
-$loader->add('ZfrOAuth2ModuleTest\\', __DIR__);
-
-$configFiles = [__DIR__ . '/TestConfiguration.php', __DIR__ . '/TestConfiguration.php.dist'];
-
-foreach ($configFiles as $configFile) {
-    if (file_exists($configFile)) {
-        $config = require $configFile;
-
-        break;
-    }
-}
-
+Bootstrap::init();
+Bootstrap::chroot();

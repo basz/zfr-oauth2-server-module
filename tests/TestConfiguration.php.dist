@@ -1,0 +1,14 @@
+<?php
+
+return [
+    'modules' => [
+        'DoctrineModule',
+        'DoctrineORMModule',
+        'ZfrOAuth2Module\Server',
+    ],
+    'module_listener_options' => [
+        'config_glob_paths' => [
+        ],
+        'module_paths' => []
+    ],
+];
