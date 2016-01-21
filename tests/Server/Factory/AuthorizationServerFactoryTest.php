@@ -18,9 +18,8 @@
 
 namespace ZfrOAuth2ModuleTest\Server\Factory;
 
-use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\FactoryInterface;
 use ZfrOAuth2Module\Server\Factory\AuthorizationServerFactory;
-use ZfrOAuth2\Server\Options\ServerOptions as ModuleOptions;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
@@ -30,45 +29,13 @@ use ZfrOAuth2\Server\Options\ServerOptions as ModuleOptions;
  */
 class AuthorizationServerFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCanCreateFromFactory()
+
+    public function testInteropCompatible()
     {
-        $serviceManager = new ServiceManager();
-
-        $serviceManager->setService(
-            'ZfrOAuth2\Server\Service\ClientService',
-            $this->getMock('ZfrOAuth2\Server\Service\ClientService', [], [], '', false)
-        );
-
-        $serviceManager->setService(
-            'ZfrOAuth2Module\Server\Options\ModuleOptions',
-            new ModuleOptions(['grants' => ['MyGrant']])
-        );
-
-        $grantPluginManager = $this->getMock('Zend\ServiceManager\AbstractPluginManager', [], [], '', false);
-
-        $serviceManager->setService(
-            'ZfrOAuth2Module\Server\Grant\GrantPluginManager',
-            $grantPluginManager
-        );
-
-        $serviceManager->setService(
-            'ZfrOAuth2\Server\Service\AccessTokenService',
-            $this->getMock('ZfrOAuth2\Server\Service\TokenService', [], [], '', false)
-        );
-
-        $serviceManager->setService(
-            'ZfrOAuth2\Server\Service\RefreshTokenService',
-            $this->getMock('ZfrOAuth2\Server\Service\TokenService', [], [], '', false)
-        );
-
-        $grantPluginManager->expects($this->once())
-            ->method('get')
-            ->with('MyGrant')
-            ->will($this->returnValue($this->getMock('ZfrOAuth2\Server\Grant\GrantInterface')));
-
         $factory = new AuthorizationServerFactory();
-        $service = $factory->createService($serviceManager);
 
-        $this->assertInstanceOf('ZfrOAuth2\Server\AuthorizationServer', $service);
+        $this->assertInstanceOf(FactoryInterface::class, $factory);
+        $this->assertTrue(is_callable($factory));
     }
+
 }
