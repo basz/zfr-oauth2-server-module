@@ -20,26 +20,19 @@ namespace ZfrOAuth2Module\Server\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZfrOAuth2\Server\Service\ClientService;
+use ZfrOAuth2\Server\Container\ClientServiceFactory as BaseClientServiceFactory;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  */
-class ClientServiceFactory implements FactoryInterface
+class ClientServiceFactory extends BaseClientServiceFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /* @var \ZfrOAuth2Module\Server\Options\ModuleOptions $options */
-        $options = $serviceLocator->get('ZfrOAuth2Module\Server\Options\ModuleOptions');
-
-        /* @var \Doctrine\Common\Persistence\ObjectManager $objectManager */
-        $objectManager    = $serviceLocator->get($options->getObjectManager());
-        $clientRepository = $objectManager->getRepository('ZfrOAuth2\Server\Entity\Client');
-
-        return new ClientService($objectManager, $clientRepository);
+        return $this($serviceLocator);
     }
 }
