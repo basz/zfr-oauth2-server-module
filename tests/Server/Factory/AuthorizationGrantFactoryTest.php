@@ -18,7 +18,7 @@
 
 namespace ZfrOAuth2ModuleTest\Server\Factory;
 
-use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\FactoryInterface;
 use ZfrOAuth2Module\Server\Factory\AuthorizationGrantFactory;
 
 /**
@@ -29,31 +29,13 @@ use ZfrOAuth2Module\Server\Factory\AuthorizationGrantFactory;
  */
 class AuthorizationGrantFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCanCreateFromFactory()
+
+    public function testInteropCompatible()
     {
-        $serviceManager = new ServiceManager();
-
-        $pluginManager = $this->getMock('Zend\ServiceManager\AbstractPluginManager');
-        $pluginManager->expects($this->once())->method('getServiceLocator')->will($this->returnValue($serviceManager));
-
-        $serviceManager->setService(
-            'ZfrOAuth2\Server\Service\AuthorizationCodeService',
-            $this->getMock('ZfrOAuth2\Server\Service\TokenService', [], [], '', false)
-        );
-
-        $serviceManager->setService(
-            'ZfrOAuth2\Server\Service\AccessTokenService',
-            $this->getMock('ZfrOAuth2\Server\Service\TokenService', [], [], '', false)
-        );
-
-        $serviceManager->setService(
-            'ZfrOAuth2\Server\Service\RefreshTokenService',
-            $this->getMock('ZfrOAuth2\Server\Service\TokenService', [], [], '', false)
-        );
-
         $factory = new AuthorizationGrantFactory();
-        $service = $factory->createService($pluginManager);
 
-        $this->assertInstanceOf('ZfrOAuth2\Server\Grant\AuthorizationGrant', $service);
+        $this->assertInstanceOf(FactoryInterface::class, $factory);
+        $this->assertTrue(is_callable($factory));
     }
+
 }

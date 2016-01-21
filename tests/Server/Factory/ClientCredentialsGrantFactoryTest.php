@@ -18,32 +18,24 @@
 
 namespace ZfrOAuth2ModuleTest\Server\Factory;
 
-use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\FactoryInterface;
 use ZfrOAuth2Module\Server\Factory\ClientCredentialsGrantFactory;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  *
- * @covers ZfrOAuth2Module\Server\Factory\ClientCredentialsGrantFactory
+ * @covers  ZfrOAuth2Module\Server\Factory\ClientCredentialsGrantFactory
  */
 class ClientCredentialsGrantFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCanCreateFromFactory()
+
+    public function testInteropCompatible()
     {
-        $serviceManager = new ServiceManager();
-
-        $pluginManager = $this->getMock('Zend\ServiceManager\AbstractPluginManager');
-        $pluginManager->expects($this->once())->method('getServiceLocator')->will($this->returnValue($serviceManager));
-
-        $serviceManager->setService(
-            'ZfrOAuth2\Server\Service\AccessTokenService',
-            $this->getMock('ZfrOAuth2\Server\Service\TokenService', [], [], '', false)
-        );
-
         $factory = new ClientCredentialsGrantFactory();
-        $service = $factory->createService($pluginManager);
 
-        $this->assertInstanceOf('ZfrOAuth2\Server\Grant\ClientCredentialsGrant', $service);
+        $this->assertInstanceOf(FactoryInterface::class, $factory);
+        $this->assertTrue(is_callable($factory));
     }
+
 }

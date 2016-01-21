@@ -20,33 +20,19 @@ namespace ZfrOAuth2Module\Server\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZfrOAuth2\Server\Grant\PasswordGrant;
+use ZfrOAuth2\Server\Container\PasswordGrantFactory as BasePasswordGrantFactory;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  */
-class PasswordGrantFactory implements FactoryInterface
+class PasswordGrantFactory extends BasePasswordGrantFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $parentLocator = $serviceLocator->getServiceLocator();
-
-        /* @var \ZfrOAuth2Module\Server\Options\ModuleOptions $options */
-        $options = $parentLocator->get('ZfrOAuth2Module\Server\Options\ModuleOptions');
-
-        $ownerCallable = $options->getOwnerCallable();
-        $ownerCallable = is_string($ownerCallable) ? $parentLocator->get($ownerCallable) : $ownerCallable;
-
-        /* @var \ZfrOAuth2\Server\Service\TokenService $accessTokenService */
-        $accessTokenService = $parentLocator->get('ZfrOAuth2\Server\Service\AccessTokenService');
-
-        /* @var \ZfrOAuth2\Server\Service\TokenService $refreshTokenService */
-        $refreshTokenService = $parentLocator->get('ZfrOAuth2\Server\Service\RefreshTokenService');
-
-        return new PasswordGrant($accessTokenService, $refreshTokenService, $ownerCallable);
+        return $this($serviceLocator);
     }
 }

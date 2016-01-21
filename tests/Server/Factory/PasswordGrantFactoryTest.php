@@ -18,48 +18,24 @@
 
 namespace ZfrOAuth2ModuleTest\Server\Factory;
 
-use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\FactoryInterface;
 use ZfrOAuth2Module\Server\Factory\PasswordGrantFactory;
-use ZfrOAuth2Module\Server\Factory\RefreshTokenGrantFactory;
-use ZfrOAuth2\Server\Options\ServerOptions as ModuleOptions;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  *
- * @covers ZfrOAuth2Module\Server\Factory\PasswordGrantFactory
+ * @covers  ZfrOAuth2Module\Server\Factory\PasswordGrantFactory
  */
 class PasswordGrantFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCanCreateFromFactory()
+
+    public function testInteropCompatible()
     {
-        $serviceManager = new ServiceManager();
-
-        $pluginManager = $this->getMock('Zend\ServiceManager\AbstractPluginManager');
-        $pluginManager->expects($this->once())->method('getServiceLocator')->will($this->returnValue($serviceManager));
-
-        $serviceManager->setService(
-            'ZfrOAuth2Module\Server\Options\ModuleOptions',
-            new ModuleOptions([
-                'owner_callable' => 'MyOwnerCallable'
-            ])
-        );
-
-        $serviceManager->setService('MyOwnerCallable', function() {});
-
-        $serviceManager->setService(
-            'ZfrOAuth2\Server\Service\AccessTokenService',
-            $this->getMock('ZfrOAuth2\Server\Service\TokenService', [], [], '', false)
-        );
-
-        $serviceManager->setService(
-            'ZfrOAuth2\Server\Service\RefreshTokenService',
-            $this->getMock('ZfrOAuth2\Server\Service\TokenService', [], [], '', false)
-        );
-
         $factory = new PasswordGrantFactory();
-        $service = $factory->createService($pluginManager);
 
-        $this->assertInstanceOf('ZfrOAuth2\Server\Grant\PasswordGrant', $service);
+        $this->assertInstanceOf(FactoryInterface::class, $factory);
+        $this->assertTrue(is_callable($factory));
     }
+
 }

@@ -19,6 +19,10 @@
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use ZfrOAuth2\Server\AuthorizationServer;
+use ZfrOAuth2\Server\Grant\AuthorizationGrant;
+use ZfrOAuth2\Server\Grant\ClientCredentialsGrant;
+use ZfrOAuth2\Server\Grant\PasswordGrant;
+use ZfrOAuth2\Server\Grant\RefreshTokenGrant;
 use ZfrOAuth2\Server\Options\ServerOptions;
 use ZfrOAuth2\Server\ResourceServer;
 use ZfrOAuth2\Server\Service\ClientService;
@@ -30,16 +34,18 @@ use ZfrOAuth2Module\Server\Factory\AccessTokenServiceFactory;
 use ZfrOAuth2Module\Server\Factory\AccessTokenStorageFactory;
 use ZfrOAuth2Module\Server\Factory\AuthorizationCodeServiceFactory;
 use ZfrOAuth2Module\Server\Factory\AuthorizationControllerFactory;
+use ZfrOAuth2Module\Server\Factory\AuthorizationGrantFactory;
 use ZfrOAuth2Module\Server\Factory\AuthorizationServerFactory;
+use ZfrOAuth2Module\Server\Factory\ClientCredentialsGrantFactory;
 use ZfrOAuth2Module\Server\Factory\ClientServiceFactory;
-use ZfrOAuth2Module\Server\Factory\GrantPluginManagerFactory;
 use ZfrOAuth2Module\Server\Factory\ManagerRegistryFactory;
 use ZfrOAuth2Module\Server\Factory\ModuleOptionsFactory;
+use ZfrOAuth2Module\Server\Factory\PasswordGrantFactory;
+use ZfrOAuth2Module\Server\Factory\RefreshTokenGrantFactory;
 use ZfrOAuth2Module\Server\Factory\RefreshTokenServiceFactory;
 use ZfrOAuth2Module\Server\Factory\ResourceServerFactory;
 use ZfrOAuth2Module\Server\Factory\ScopeServiceFactory;
 use ZfrOAuth2Module\Server\Factory\TokenControllerFactory;
-use ZfrOAuth2Module\Server\Grant\GrantPluginManager;
 use ZfrOAuth2Module\Util\DoctrineRegistry;
 
 return [
@@ -56,9 +62,12 @@ return [
             ClientService::class                                => ClientServiceFactory::class,
             ScopeService::class                                 => ScopeServiceFactory::class,
             AccessTokenStorage::class                           => AccessTokenStorageFactory::class,
-            GrantPluginManager::class                           => GrantPluginManagerFactory::class,
             DoctrineRegistry::class                             => ManagerRegistryFactory::class,
             ServerOptions::class                                => ModuleOptionsFactory::class,
+            AuthorizationGrant::class                           => AuthorizationGrantFactory::class,
+            ClientCredentialsGrant::class                       => ClientCredentialsGrantFactory::class,
+            PasswordGrant::class                                => PasswordGrantFactory::class,
+            RefreshTokenGrant::class                            => RefreshTokenGrantFactory::class,
 
             /**
              * Factories that do not map to a class
@@ -172,6 +181,5 @@ return [
     ],
 
     'zfr_oauth2_server' => [
-        'grant_manager' => []
     ]
 ];

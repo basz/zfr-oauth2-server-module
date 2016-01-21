@@ -18,9 +18,11 @@
 
 namespace ZfrOAuth2Module\Server\Factory;
 
+use Interop\Container\ContainerInterface;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZfrOAuth2Module\Server\Authentication\Storage\AccessTokenStorage;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
@@ -29,14 +31,23 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class AuthenticationServiceFactory implements FactoryInterface
 {
     /**
+     * @param ContainerInterface $container
+     * @return AuthenticationService
+     */
+    public function __invoke(ContainerInterface $container)
+    {
+        /* @var AccessTokenStorage $accessTokenStorage */
+        $accessTokenStorage = $container->get(AccessTokenStorage::class);
+
+        // When using an API based on a REST API, the authentication is stateless
+        return new AuthenticationService($accessTokenStorage);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /* @var \ZfrOAuth2Module\Server\Authentication\Storage\AccessTokenStorage $accessTokenStorage */
-        $accessTokenStorage = $serviceLocator->get('ZfrOAuth2Module\Server\Authentication\Storage\AccessTokenStorage');
-
-        // When using an API based on a REST API, the authentication is stateless
-        return new AuthenticationService($accessTokenStorage);
+        return $this($serviceLocator);
     }
 }

@@ -20,27 +20,19 @@ namespace ZfrOAuth2Module\Server\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZfrOAuth2\Server\Grant\RefreshTokenGrant;
+use ZfrOAuth2\Server\Container\RefreshTokenGrantFactory as BaseRefreshTokenGrantFactory;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  */
-class RefreshTokenGrantFactory implements FactoryInterface
+class RefreshTokenGrantFactory extends BaseRefreshTokenGrantFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $parentLocator = $serviceLocator->getServiceLocator();
-
-        /* @var \ZfrOAuth2\Server\Service\TokenService $accessTokenService */
-        $accessTokenService = $parentLocator->get('ZfrOAuth2\Server\Service\AccessTokenService');
-
-        /* @var \ZfrOAuth2\Server\Service\TokenService $refreshTokenService */
-        $refreshTokenService = $parentLocator->get('ZfrOAuth2\Server\Service\RefreshTokenService');
-
-        return new RefreshTokenGrant($accessTokenService, $refreshTokenService);
+        return $this($serviceLocator);
     }
 }

@@ -20,24 +20,18 @@ namespace ZfrOAuth2Module\Server\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZfrOAuth2\Server\Grant\ClientCredentialsGrant;
-
+use ZfrOAuth2\Server\Container\ClientCredentialsGrantFactory as BaseClientCredentialsGrantFactory;
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  */
-class ClientCredentialsGrantFactory implements FactoryInterface
+class ClientCredentialsGrantFactory extends BaseClientCredentialsGrantFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $parentLocator = $serviceLocator->getServiceLocator();
-
-        /* @var \ZfrOAuth2\Server\Service\TokenService $accessTokenService */
-        $accessTokenService = $parentLocator->get('ZfrOAuth2\Server\Service\AccessTokenService');
-
-        return new ClientCredentialsGrant($accessTokenService);
+        return $this($serviceLocator);
     }
 }

@@ -18,15 +18,17 @@
 
 namespace ZfrOAuth2ModuleTest\Server\Factory;
 
+use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ServiceManager;
+use ZfrOAuth2\Server\AuthorizationServer;
+use ZfrOAuth2Module\Server\Controller\AuthorizationController;
 use ZfrOAuth2Module\Server\Factory\AuthorizationControllerFactory;
-use ZfrOAuth2Module\Server\Factory\AuthorizationGrantFactory;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  *
- * @covers ZfrOAuth2Module\Server\Factory\AuthorizationControllerFactory
+ * @covers  ZfrOAuth2Module\Server\Factory\AuthorizationControllerFactory
  */
 class AuthorizationControllerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,17 +36,17 @@ class AuthorizationControllerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
 
-        $pluginManager = $this->getMock('Zend\ServiceManager\AbstractPluginManager');
+        $pluginManager = $this->getMock(AbstractPluginManager::class);
         $pluginManager->expects($this->once())->method('getServiceLocator')->will($this->returnValue($serviceManager));
 
         $serviceManager->setService(
-            'ZfrOAuth2\Server\AuthorizationServer',
-            $this->getMock('ZfrOAuth2\Server\AuthorizationServer', [], [], '', false)
+            AuthorizationServer::class,
+            $this->getMock(AuthorizationServer::class, [], [], '', false)
         );
 
         $factory = new AuthorizationControllerFactory();
         $service = $factory->createService($pluginManager);
 
-        $this->assertInstanceOf('ZfrOAuth2Module\Server\Controller\AuthorizationController', $service);
+        $this->assertInstanceOf(AuthorizationController::class, $service);
     }
 }

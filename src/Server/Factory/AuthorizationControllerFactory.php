@@ -20,6 +20,7 @@ namespace ZfrOAuth2Module\Server\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZfrOAuth2\Server\AuthorizationServer;
 use ZfrOAuth2Module\Server\Controller\AuthorizationController;
 
 /**
@@ -34,6 +35,7 @@ class AuthorizationControllerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $parentLocator = $serviceLocator->getServiceLocator();
-        return new AuthorizationController($parentLocator->get('ZfrOAuth2\Server\AuthorizationServer'));
+
+        return new AuthorizationController($parentLocator->get(AuthorizationServer::class));
     }
 }

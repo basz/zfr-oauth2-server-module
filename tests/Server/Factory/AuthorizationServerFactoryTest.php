@@ -19,15 +19,14 @@
 namespace ZfrOAuth2ModuleTest\Server\Factory;
 
 use Zend\ServiceManager\ServiceManager;
-use ZfrOAuth2Module\Server\Factory\AccessTokenServiceFactory;
 use ZfrOAuth2Module\Server\Factory\AuthorizationServerFactory;
-use ZfrOAuth2Module\Server\Options\ModuleOptions;
+use ZfrOAuth2\Server\Options\ServerOptions as ModuleOptions;
 
 /**
  * @author  Michaël Gallego <mic.gallego@gmail.com>
  * @licence MIT
  *
- * @covers ZfrOAuth2Module\Server\Factory\AuthorizationServerFactory
+ * @covers  ZfrOAuth2Module\Server\Factory\AuthorizationServerFactory
  */
 class AuthorizationServerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,9 +62,9 @@ class AuthorizationServerFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $grantPluginManager->expects($this->once())
-                           ->method('get')
-                           ->with('MyGrant')
-                           ->will($this->returnValue($this->getMock('ZfrOAuth2\Server\Grant\GrantInterface')));
+            ->method('get')
+            ->with('MyGrant')
+            ->will($this->returnValue($this->getMock('ZfrOAuth2\Server\Grant\GrantInterface')));
 
         $factory = new AuthorizationServerFactory();
         $service = $factory->createService($serviceManager);
