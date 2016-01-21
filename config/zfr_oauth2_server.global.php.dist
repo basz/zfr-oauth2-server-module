@@ -48,7 +48,7 @@ return [
         /**
          * Doctrine object manager key
          */
-        // 'object_manager' => 'doctrine.entitymanager.orm_default',
+        // 'object_manager' => 'orm_default',
 
         /**
          * Various tokens TTL

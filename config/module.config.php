@@ -46,7 +46,7 @@ use ZfrOAuth2Module\Server\Factory\RefreshTokenServiceFactory;
 use ZfrOAuth2Module\Server\Factory\ResourceServerFactory;
 use ZfrOAuth2Module\Server\Factory\ScopeServiceFactory;
 use ZfrOAuth2Module\Server\Factory\TokenControllerFactory;
-use ZfrOAuth2Module\Util\DoctrineRegistry;
+use ZfrOAuth2Module\Server\Util\DoctrineRegistry;
 
 return [
     'service_manager' => [

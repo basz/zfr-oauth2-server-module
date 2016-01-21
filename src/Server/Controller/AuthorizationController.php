@@ -42,6 +42,6 @@ class AuthorizationController extends AbstractActionController
 
     public function authorizeAction()
     {
-        // @TODO
+        throw new \RuntimeException("Not yet implemented");
     }
 }
