@@ -21,7 +21,7 @@ namespace ZfrOAuth2Module\Server\Factory;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
-use ZfrOAuth2Module\Util\DoctrineRegistry;
+use ZfrOAuth2Module\Server\Util\DoctrineRegistry;
 
 /**
  * Class ManagerRegistryFactory

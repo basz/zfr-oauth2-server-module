@@ -1,6 +1,6 @@
 <?php
 
-namespace ZfrOAuth2Module\Util;
+namespace ZfrOAuth2Module\Server\Util;
 
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Doctrine\ORM\ORMException;
