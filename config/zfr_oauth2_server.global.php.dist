@@ -68,11 +68,5 @@ return [
          */
         // 'owner_callable' => null,
 
-        /**
-         * Grant plugin manager
-         *
-         * The configuration follows a standard service manager configuration
-         */
-        // 'grant_manager' => []
     ]
 ];
